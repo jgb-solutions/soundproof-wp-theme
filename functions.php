@@ -16,3 +16,9 @@ if (!function_exists('get_field')) {
 		return get_post_meta(get_the_ID(), $key, $single);
 	}
 }
+
+if(!function_exists('get_soundproof_settings')) {
+	function get_soundproof_settings($option_key) {
+		return get_option('soundproof_settings_' . $option_key);
+	}
+}

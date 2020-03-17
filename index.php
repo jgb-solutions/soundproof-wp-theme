@@ -120,7 +120,8 @@
 	$home_slides = new WP_Query( [
 		'post_type'      => 'home_slide',
 		'posts_per_page' => 3,
-//        'orderby' => ['title', 'asc']
+		'orderby'        => 'menu_order',
+		'order'          => 'asc',
 	] );
 
 	if ( $home_slides->have_posts() ):?>
@@ -130,50 +131,48 @@
 					$home_slides->the_post();
 					?>
                     <div class="item">
-                        <img src="<?= get_field('slide_image')['guid'] ?>" alt="<?= get_the_title() ?>" />
+                        <img src="<?= get_field( 'slide_image' )['guid'] ?>" alt="<?= get_the_title() ?>"/>
                         <div class="banner-content">
                             <div class="container">
                                 <div class="row">
                                     <div class="col-sm-6 col-sm-push-6">
                                         <div class="banner-text">
                                             <h2><?= get_the_title() ?></h2>
-                                            <a href="<?= get_field('button_url') ?>"
+                                            <a href="<?= get_field( 'button_url' ) ?>"
                                                class="btn btn-primary">
-												<?= get_field('button_text') ?>
-                                            </`a>
+												<?= get_field( 'button_text' ) ?>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-				<?php
-				endwhile;
-			?>
+				<?php endwhile; ?>
         </section>
-	<?php
-	endif;
-	wp_reset_postdata()
-?>
+	<?php endif;
+	wp_reset_postdata() ?>
 
 <section class="top-content">
     <div class="container">
         <div class="top-bg">
             <div class="row">
                 <div class="col-sm-6">
-                    <div class="top-left" style="background-image: url(assets/img/diyer-bg.png)">
-                        <h2>The DIYer</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris placerat rhoncus enim, vitae
-                            luctus odio feugiat quis.</p>
-                        <a href="#" class="btn btn-primary">shop now</a>
+                    <div class="top-left"
+                         style="background-image: url(<?= wp_get_attachment_image_src( get_soundproof_settings( 'diy_block_image' )[0], 'full' )[0] ?>)">
+                        <h2><?= get_soundproof_settings( 'diy_block_title' ) ?></h2>
+                        <p><?= get_soundproof_settings( 'diy_block_text' ) ?></p>
+                        <a href="<?= get_soundproof_settings( 'diy_block_link' ) ?>"
+                           class="btn btn-primary"><?= get_soundproof_settings( 'diy_block_button_text' ) ?></a>
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <div class="top-left" style="background-image: url(assets/img/commercial-bg.png)">
-                        <h2>The Commercial Pro</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris placerat rhoncus enim, vitae
-                            luctus odio feugiat quis.</p>
-                        <a href="#" class="btn btn-secondary">shop now</a>
+                    <div class="top-left"
+                         style="background-image: url(<?= wp_get_attachment_image_src( get_soundproof_settings( 'commercial_pro_image' )[0], 'full' )[0] ?>)">
+                        <h2><?= get_soundproof_settings( 'commercial_pro_title' ) ?></h2>
+                        <p><?= get_soundproof_settings( 'commercial_pro_text' ) ?></p>
+                        <a href="<?= get_soundproof_settings( 'commercial_pro_link' ) ?>"
+                           class="btn btn-secondary"><?= get_soundproof_settings( 'commercial_pro_button_text' ) ?></a>
                     </div>
                 </div>
             </div>
@@ -183,142 +182,131 @@
 
 <div class="container">
     <div class="service-show-in-mobile">
-        <a href="#" class="btn btn-secondary btn-block">shop diy products</a>
-        <a href="#" class="btn btn-secondary btn-block">shop commercial products</a>
+        <a href="<?= get_soundproof_settings( 'diy_block_link' ) ?>" class="btn btn-secondary btn-block">
+			<?= get_soundproof_settings( 'diy_block_mobile_button_text' ) ?>
+        </a>
+        <a href="<?= get_soundproof_settings( 'commercial_pro_link' ) ?>" class="btn btn-secondary btn-block">
+			<?= get_soundproof_settings( 'commercial_pro_mobile_button_text	' ) ?>
+        </a>
     </div>
 </div>
 
-<section class="solution-section">
-    <div class="container">
-        <h2>Soundproofing Solutions</h2>
+<?php
+	$solutions = new WP_Query( [
+		'post_type'      => 'solution',
+		'posts_per_page' => 6,
+//		'orderby' => 'menu_order',
+//		'order' => 'asc'
+	] );
 
-        <div class="hide-mobile">
-            <div class="row">
-                <div class="col-sm-4">
-                    <div class="solution-item">
-                        <div class="solution-img">
-                            <img src="<?php echo get_stylesheet_directory_uri() ?>/assets/img/accoustic-panels.jpg"
-                                 alt="">
-                        </div>
-                        <div class="solution-text">
-                            <h3>Accoustic Panels</h3>
-                            <ul>
-                                <li>Absorb Sound Waves</li>
-                                <li>Clarify Speech</li>
-                                <li>Limit Reverberation</li>
-                            </ul>
-                            <a href="#" class="btn btn-primary">shop now</a>
-                        </div>
+	if ( $solutions->have_posts() ): ?>
+        <section class="solution-section">
+            <div class="container">
+                <h2>Soundproofing Solutions</h2>
+
+                <div class="hide-mobile">
+                    <div class="row">
+						<?php
+							while ( $solutions->have_posts() ):
+								$solutions->the_post();
+								?>
+                                <div class="col-sm-4">
+                                    <div class="solution-item">
+                                        <div class="solution-img">
+                                            <img src="<?= get_field( 'solution_image' )['guid'] ?>"
+                                                 alt="<?= get_the_title() ?>">
+                                        </div>
+                                        <div class="solution-text">
+                                            <h3><?= get_the_title() ?></h3>
+                                            <ul>
+												<?php if ( $button_1 = get_field( 'bullet_point_1' ) ): ?>
+                                                    <li><?= $button_1 ?></li>
+												<?php endif ?>
+
+												<?php if ( $button_2 = get_field( 'bullet_point_2' ) ): ?>
+                                                    <li><?= $button_2 ?></li>
+												<?php endif ?>
+
+												<?php if ( $button_3 = get_field( 'bullet_point_3' ) ): ?>
+                                                    <li><?= $button_3 ?></li>
+												<?php endif ?>
+                                            </ul>
+                                            <a href="<?= get_field( 'button_link' ) ?>" class="btn btn-primary">shop
+                                                now</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+							<?php endwhile; ?>
+
                     </div>
                 </div>
-                <div class="col-sm-4">
-                    <div class="solution-item">
-                        <div class="solution-img">
-                            <img src="<?php echo get_stylesheet_directory_uri() ?>/assets/img/soundproofing-materials.jpg"
-                                 alt="">
-                        </div>
-                        <div class="solution-text">
-                            <h3>Soundproofing Materials</h3>
-                            <ul>
-                                <li>Prevent the transmission of sound</li>
-                                <li>Add Privacy to a Room</li>
-                                <li>Ideal in a variety of spaces</li>
-                            </ul>
-                            <a href="#" class="btn btn-primary">shop now</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="solution-item">
-                        <div class="solution-img">
-                            <img src="<?php echo get_stylesheet_directory_uri() ?>/assets/img/sound-absorbtion.jpg"
-                                 alt="">
-                        </div>
-                        <div class="solution-text">
-                            <h3>Sound Absorbtion</h3>
-                            <ul>
-                                <li>Improve Sound Quality</li>
-                                <li>Reduce Background Noise</li>
-                                <li>Ideal in a variety of spaces</li>
-                            </ul>
-                            <a href="#" class="btn btn-primary">shop now</a>
-                        </div>
-                    </div>
-                </div>
+
+                <div class="left-bubble"></div>
             </div>
-        </div>
+        </section>
+	<?php endif;
+	wp_reset_postdata() ?>
 
-        <div class="left-bubble"></div>
-    </div>
-</section>
+<?php
+	$solutions = new WP_Query( [
+		'post_type'      => 'solution',
+		'posts_per_page' => 6,
+//		'orderby' => 'menu_order',
+//		'order' => 'asc'
+	] );
 
+	if ( $solutions->have_posts() ): ?>
 <div class="hide-desktop">
     <div class="accordion">
-        <h4>Accoustic Panels</h4>
+	    <?php
+		    while ( $solutions->have_posts() ):
+			    $solutions->the_post();
+			    ?>
+        <h4><?= get_the_title() ?></h4>
         <div class="accordion-content">
             <div class="solution-item">
                 <div class="solution-img">
-                    <img src="<?php echo get_stylesheet_directory_uri() ?>/assets/img/accoustic-panels.jpg" alt="">
+                    <img src="<?= get_field( 'solution_image' )['guid'] ?>" alt="<?= get_the_title() ?>">
                 </div>
                 <div class="solution-text">
-                    <h3>Accoustic Panels</h3>
+                    <h3><?= get_the_title() ?></h3>
                     <ul>
-                        <li>Absorb Sound Waves</li>
-                        <li>Clarify Speech</li>
-                        <li>Limit Reverberation</li>
+	                    <?php if ( $button_1 = get_field( 'bullet_point_1' ) ): ?>
+                            <li><?= $button_1 ?></li>
+	                    <?php endif ?>
+
+	                    <?php if ( $button_2 = get_field( 'bullet_point_2' ) ): ?>
+                            <li><?= $button_2 ?></li>
+	                    <?php endif ?>
+
+	                    <?php if ( $button_3 = get_field( 'bullet_point_3' ) ): ?>
+                            <li><?= $button_3 ?></li>
+	                    <?php endif ?>
                     </ul>
-                    <a href="#" class="btn btn-primary">shop now</a>
+                    <a href="<?= get_field( 'button_link' ) ?>" class="btn btn-primary">shop now</a>
                 </div>
             </div>
         </div>
-        <h4>Soundproofing Materials</h4>
-        <div class="accordion-content">
-            <div class="solution-item">
-                <div class="solution-img">
-                    <img src="<?php echo get_stylesheet_directory_uri() ?>/assets/img/soundproofing-materials.jpg"
-                         alt="">
-                </div>
-                <div class="solution-text">
-                    <h3>Soundproofing Materials</h3>
-                    <ul>
-                        <li>Prevent the transmission of sound</li>
-                        <li>Add Privacy to a Room</li>
-                        <li>Ideal in a variety of spaces</li>
-                    </ul>
-                    <a href="#" class="btn btn-primary">shop now</a>
-                </div>
-            </div>
-        </div>
-        <h4>Soundproofing Materials</h4>
-        <div class="accordion-content">
-            <div class="solution-item">
-                <div class="solution-img">
-                    <img src="<?php echo get_stylesheet_directory_uri() ?>/assets/img/sound-absorbtion.jpg" alt="">
-                </div>
-                <div class="solution-text">
-                    <h3>Sound Absorbtion</h3>
-                    <ul>
-                        <li>Improve Sound Quality</li>
-                        <li>Reduce Background Noise</li>
-                        <li>Ideal in a variety of spaces</li>
-                    </ul>
-                    <a href="#" class="btn btn-primary">shop now</a>
-                </div>
-            </div>
-        </div>
+        <?php endwhile; ?>
     </div>
 </div>
+
+<?php endif; wp_reset_postdata() ?>
 
 <div class="container">
     <div class="ensure">
         <div class="hmm">
             <img src="<?php echo get_stylesheet_directory_uri() ?>/assets/img/hmm-bg.png" alt="">
         </div>
-        <h2>Unsure of Where to Begin?</h2>
-        <p>Start with our online questionnaire and we can help you solve your noise issue. We are<br>here to help! The
-            fastest way to a solution is to call us.</p>
-        <a href="tel:1.866.949.9269" class="btn-call">1.866.949.9269</a> <a href="#" class="btn-get">Get started
-            Today</a>
+        <h2><?= get_soundproof_settings('cta_block_title') ?></h2>
+        <p><?= get_soundproof_settings('cta_block_text') ?></p>
+        <a href="tel:<?= get_soundproof_settings('call_button_call_number') ?>" class="btn-call">
+	        <?= get_soundproof_settings('call_button_call_text') ?>
+        </a>
+        <a href="<?= get_soundproof_settings('call_button_get_start_link') ?>" class="btn-get">
+	        <?= get_soundproof_settings('call_button_get_started_text') ?>
+        </a>
 
     </div>
 </div>
@@ -329,34 +317,52 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="acoustic-content">
-                    <h2><span>Acoustic Panels, Soundproofing Materials and Solutions </span> Made Simple.</h2>
-                    <p>At Soundproof Cow, we understand that unwanted noise shouldn’t have to be something you live
-                        with, which is why we carry all kinds of soundproofing,
-                        sound absorption and noise reduction materials from top brands like Udderly Quiet™ and Quiet
-                        Batt™. Whether you’re soundproofing a room with
-                        Acoustic Panels or building a recording studio with Acoustic Foam, our solutions-based approach
-                        to soundproofing any space is truly unique.</p>
+                    <?= get_soundproof_settings('about_us_text') ?>
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="acoustic-text">
                     <ul class="clearfix">
-                        <li>
-                            <img src="<?php echo get_stylesheet_directory_uri() ?>/assets/img/icon-1.png">
-                            <div class="acoustic-list">Superior Products</div>
-                        </li>
-                        <li>
-                            <img src="<?php echo get_stylesheet_directory_uri() ?>/assets/img/icon-2.png">
-                            <div class="acoustic-list">Individualized Customer Service</div>
-                        </li>
-                        <li>
-                            <img src="<?php echo get_stylesheet_directory_uri() ?>/assets/img/icon-3.png">
-                            <div class="acoustic-list">Solutions for All Sizes of Projects</div>
-                        </li>
-                        <li>
-                            <img src="<?php echo get_stylesheet_directory_uri() ?>/assets/img/icon-4.png">
-                            <div class="acoustic-list">Experts in Our Field</div>
-                        </li>
+	                    <?php if ( $icon_text_1 = get_soundproof_settings( 'icon_text_1' ) ): ?>
+                            <li>
+	                            <?php if ( $icon_image_1 = get_soundproof_settings( 'icon_image_1' ) ): ?>
+                                    <img src="<?= wp_get_attachment_image_src( $icon_image_1[0], 'full' )[0] ?>">
+	                            <?php endif ?>
+
+                                <div class="acoustic-list"><?= $icon_text_1 ?></div>
+                            </li>
+	                    <?php endif ?>
+
+	                    <?php if ( $icon_text_2 = get_soundproof_settings( 'icon_text_2' ) ): ?>
+                            <li>
+			                    <?php if ( $icon_image_2 = get_soundproof_settings( 'icon_image_2' ) ): ?>
+                                    <img src="<?= wp_get_attachment_image_src( $icon_image_2[0], 'full' )[0] ?>">
+			                    <?php endif ?>
+
+                                <div class="acoustic-list"><?= $icon_text_2 ?></div>
+                            </li>
+	                    <?php endif ?>
+
+	                    <?php if ( $icon_text_3 = get_soundproof_settings( 'icon_text_3' ) ): ?>
+                            <li>
+			                    <?php if ( $icon_image_3 = get_soundproof_settings( 'icon_image_3' ) ): ?>
+                                    <img src="<?= wp_get_attachment_image_src( $icon_image_3[0], 'full' )[0] ?>">
+			                    <?php endif ?>
+
+                                <div class="acoustic-list"><?= $icon_text_3 ?></div>
+                            </li>
+	                    <?php endif ?>
+
+	                    <?php if ( $icon_text_4 = get_soundproof_settings( 'icon_text_4' ) ): ?>
+                            <li>
+			                    <?php if ( $icon_image_4 = get_soundproof_settings( 'icon_image_4' ) ): ?>
+                                    <img src="<?= wp_get_attachment_image_src( $icon_image_4[0], 'full' )[0] ?>">
+			                    <?php endif ?>
+
+                                <div class="acoustic-list"><?= $icon_text_4 ?></div>
+                            </li>
+	                    <?php endif ?>
+
                     </ul>
                 </div>
             </div>
